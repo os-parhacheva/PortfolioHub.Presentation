@@ -1,0 +1,180 @@
+﻿@page "/profile"
+@using System.ComponentModel.DataAnnotations
+
+<PageTitle>Профиль пользователя</PageTitle>
+
+<div class="user-profile-container">
+    <div class="profile-header">
+        <h2>Профиль пользователя</h2>
+        <div class="avatar-placeholder">
+            @GetInitials()
+        </div>
+    </div>
+
+    <div class="profile-sections">
+        <!-- Личная информация -->
+        <div class="profile-section">
+            <h3 class="section-title">
+                <i class="fas fa-user section-icon"></i>
+                Личная информация
+            </h3>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <label class="info-label">ФИО:</label>
+                    <div class="info-value">
+                        @(LastName + " " + FirstName + " " + MiddleName)
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <label class="info-label">Дата рождения:</label>
+                    <div class="info-value">
+                        @BirthDate.ToString("dd.MM.yyyy")
+                        <span class="age-badge">(@CalculateAge() лет)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Контактная информация -->
+        <div class="profile-section">
+            <h3 class="section-title">
+                <i class="fas fa-envelope section-icon"></i>
+                Контактная информация
+            </h3>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <label class="info-label">Email:</label>
+                    <div class="info-value">
+                        <!-- Ссылка mailto для открытия почтового клиента -->
+                        <a href="mailto:@Email" class="contact-link">
+                            <i class="fas fa-envelope contact-icon"></i>
+                            @Email
+                        </a>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <label class="info-label">Телефон:</label>
+                    <div class="info-value">
+                        <!-- Ссылка tel для совершения звонка (на мобильных устройствах) -->
+                        <a href="tel:@Phone" class="contact-link">
+                            <i class="fas fa-phone contact-icon"></i>
+                            @FormatPhoneNumber()
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Образование -->
+        <div class="profile-section">
+            <h3 class="section-title">
+                <i class="fas fa-graduation-cap section-icon"></i>
+                Образование
+            </h3>
+
+            <div class="info-grid">
+                <div class="info-item">
+                    <label class="info-label">Университет:</label>
+                    <div class="info-value">@University</div>
+                </div>
+
+                <div class="info-item">
+                    <label class="info-label">Факультет:</label>
+                    <div class="info-value">@Faculty</div>
+                </div>
+
+                <div class="info-item">
+                    <label class="info-label">Специальность:</label>
+                    <div class="info-value">@Speciality</div>
+                </div>
+
+                <div class="info-item">
+                    <label class="info-label">Курс:</label>
+                    <div class="info-value">
+                        <!-- Стилизованный бейдж для отображения курса -->
+                        <span class="grade-badge">@GetGradeDisplay()</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    // Свойства модели пользователя
+    public Guid Id { get; set; }
+    public string FirstName { get; set; } = "";
+    public string LastName { get; set; } = "";
+    public string MiddleName { get; set; } = "";
+    public DateTime BirthDate { get; set; }
+    public string Email { get; set; } = "";
+    public string Phone { get; set; } = "";
+    public string University { get; set; } = "";
+    public string Faculty { get; set; } = "";
+    public string Speciality { get; set; } = "";
+    public int Graid { get; set; }
+
+    protected override void OnInitialized()
+    {
+        // Пример заполнения данными (в реальном проекте данные будут приходить из API)
+        Id = Guid.NewGuid();
+        FirstName = "Иван";
+        LastName = "Иванов";
+        MiddleName = "Иванович";
+        BirthDate = new DateTime(2000, 5, 15);
+        Email = "ivanov@example.com";
+        Phone = "+79001234567";
+        University = "Национальный исследовательский университет";
+        Faculty = "Информационных технологий";
+        Speciality = "Программная инженерия";
+        Graid = 3;
+    }
+
+    private string GetInitials()
+    {
+        var first = FirstName.Length > 0 ? FirstName[0].ToString() : "";
+        var last = LastName.Length > 0 ? LastName[0].ToString() : "";
+        return $"{last}{first}".ToUpper();
+    }
+
+    private int CalculateAge()
+    {
+        var today = DateTime.Today;
+        var age = today.Year - BirthDate.Year;
+        if (BirthDate.Date > today.AddYears(-age)) age--;
+        return age;
+    }
+
+    private string FormatPhoneNumber()
+    {
+        if (string.IsNullOrEmpty(Phone)) return Phone;
+
+        if (Phone.StartsWith("+7") && Phone.Length == 12)
+        {
+            return $"+7 ({Phone.Substring(2, 3)}) {Phone.Substring(5, 3)}-{Phone.Substring(8, 2)}-{Phone.Substring(10, 2)}";
+        }
+
+        return Phone;
+    }
+
+    private string GetGradeDisplay()
+    {
+        return $"{Graid} курс";
+    //   switch (Graid)
+    //     {
+    //         case 1: return "1 курс";
+    //         case 2: return "2 курс";
+    //         case 3: return "3 курс";
+    //         case 4: return "4 курс";
+    //         case 5: return "5 курс";
+    //         case 6: return "6 курс";
+    //         default: return $"{Graid} курс";
+    //     }
+    // }
+}
+}
