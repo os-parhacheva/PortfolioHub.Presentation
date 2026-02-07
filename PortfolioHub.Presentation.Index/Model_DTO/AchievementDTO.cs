@@ -15,7 +15,7 @@ namespace PortfolioHub.Presentation.Index
         // Описание достижения
         public string Description { get; set; } = "";
         // Дата достижения
-        public DateTime Date { get; set; } //= DateTime.Today;
+        public DateTime Date { get; set; } 
         // Ссылка на документ/сайт
         public string Url { get; set; } = "";
 
@@ -23,5 +23,10 @@ namespace PortfolioHub.Presentation.Index
         public DateTime EditDate { get; set; }
         //Автор изменения
         public string EditBy { get; set; }
+
+        // Связь с пользователем
+        public Guid UserId { get; set; }
+
+
     }
 }
