@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="7.0.18" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CourseComponents\" />
+  </ItemGroup>
+
 </Project>

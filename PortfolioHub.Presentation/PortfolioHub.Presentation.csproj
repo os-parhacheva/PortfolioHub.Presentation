@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PortfolioHub.Presentation.Index\PortfolioHub.Presentation.Index.csproj" />
+    <ProjectReference Include="..\PortfolioHub.Presentation.Razor.Index\PortfolioHub.Presentation.Razor.Index.csproj" />
   </ItemGroup>
 
 </Project>

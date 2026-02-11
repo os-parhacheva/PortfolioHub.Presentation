@@ -1,0 +1,90 @@
+﻿
+<EditForm Model="@NewCourse" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="title">Название курса *</label>
+        <InputText id="title" @bind-Value="@NewCourse.Title" class="form-control" />
+        <ValidationMessage For="@(() => NewCourse.Title)" />
+    </div>
+
+    <div class="form-group">
+        <label for="description">Описание</label>
+        <InputTextArea id="description" @bind-Value="@NewCourse.Description" class="form-control" rows="3" />
+    </div>
+
+    <div class="form-group">
+        <label for="platform">Платформа *</label>
+        <InputText id="platform" @bind-Value="@NewCourse.Platform" class="form-control" />
+        <ValidationMessage For="@(() => NewCourse.Platform)" />
+    </div>
+
+    <div class="form-group">
+        <label for="certificate">Сертификат</label>
+        <InputText id="certificate" @bind-Value="@NewCourse.Certificate" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="hours">Количество часов *</label>
+        <InputNumber id="hours" @bind-Value="@NewCourse.Hours" class="form-control" />
+        <ValidationMessage For="@(() => NewCourse.Hours)" />
+    </div>
+
+    <div class="form-group">
+        <label for="date">Дата прохождения *</label>
+        <InputDate id="date" @bind-Value="@NewCourse.Date" class="form-control" />
+        <ValidationMessage For="@(() => NewCourse.Date)" />
+    </div>
+
+    <div class="form-group">
+        <label for="url">Ссылка на курс/сертификат</label>
+        <InputText id="url" @bind-Value="@NewCourse.Url" class="form-control" />
+    </div>
+
+    <div class="form-group mt-3">
+        <button type="submit" class="btn btn-primary">Создать курс</button>
+        <button type="button" class="btn btn-secondary" @onclick="@OnCancel">Отмена</button>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public Guid UserId { get; set; }
+
+    [Parameter]
+    public EventCallback<CourseDTO> OnCourseCreated { get; set; }
+
+    [Parameter]
+    public EventCallback OnCancel { get; set; }
+
+    private CourseDTO NewCourse { get; set; } = new CourseDTO();
+
+    protected override void OnInitialized()
+    {
+        // Инициализация нового курса
+        NewCourse = new CourseDTO
+        {
+            Id = Guid.NewGuid(),
+            UserId = UserId,
+            Date = DateTime.Now,
+            EditDate = DateTime.Now,
+            //EditBy = "current_user" 
+        };
+    }
+
+    private async Task HandleValidSubmit()
+    {
+        // Обновляем дату редактирования
+        NewCourse.EditDate = DateTime.Now;
+        
+        // Отправляем событие с созданным курсом
+        await OnCourseCreated.InvokeAsync(NewCourse);
+    }
+
+    private void HandleInvalidSubmit()
+    {
+        // Действия при невалидной форме
+        Console.WriteLine("Форма содержит ошибки");
+    }
+}
