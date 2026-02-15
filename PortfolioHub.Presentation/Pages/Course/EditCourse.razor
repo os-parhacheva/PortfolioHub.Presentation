@@ -201,12 +201,12 @@
             if (response.IsSuccessStatusCode)
             {
                 await JS.InvokeVoidAsync("alert", "Курс успешно обновлен");
-                Navigation.NavigateTo("/user-courses"); // Перенаправляем на страницу со списком курсов
+                GoBack();               
             }
             else
             {
-                // var error = await response.Content.ReadAsStringAsync();
-                // await JS.InvokeVoidAsync("alert", $"Ошибка при сохранении: {error}");
+                 var error = await response.Content.ReadAsStringAsync();
+                 await JS.InvokeVoidAsync("alert", $"Ошибка при сохранении: {error}");
             }
         }
         catch (Exception ex)
@@ -222,6 +222,6 @@
 
     private void GoBack()
     {
-        Navigation.NavigateTo("/user-courses");
+        Navigation.NavigateTo("/user-courses");  // Перенаправляем на страницу со списком курсов
     }
 }
